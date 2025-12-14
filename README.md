@@ -396,6 +396,59 @@ GET /api/v1/account/info
 
 ## 部署说明
 
+### 🚀 一键启动（推荐）
+
+**快速启动**：
+```bash
+# macOS/Linux
+./quick-start.sh
+
+# Windows
+start.bat
+```
+
+**完整功能脚本**：
+```bash
+# macOS/Linux
+./start.sh [选项]
+
+# Windows  
+start.bat [选项]
+```
+
+**可用选项**：
+- `start` - 启动系统（默认）
+- `stop` - 停止系统
+- `restart` - 重启系统
+- `status` - 查看系统状态
+- `logs` - 查看日志
+- `dev` - 开发模式启动
+- `test` - 运行测试
+- `build` - 构建项目
+- `clean` - 清理系统
+- `help` - 显示帮助
+
+**使用示例**：
+```bash
+./start.sh start    # 启动系统
+./start.sh dev      # 开发模式
+./start.sh logs     # 查看日志
+./start.sh status   # 查看状态
+./start.sh stop     # 停止系统
+```
+
+**Makefile命令**（推荐）：
+```bash
+make help          # 查看所有命令
+make start         # 启动系统
+make dev           # 开发模式
+make logs          # 查看日志
+make status        # 查看状态
+make stop          # 停止系统
+make health        # 健康检查
+make backup        # 备份数据库
+```
+
 ### 环境变量配置
 
 复制 `.env.example` 到 `.env` 并配置相应参数：
@@ -415,7 +468,7 @@ LOG_LEVEL=info
 ENCRYPTION_KEY=your_encryption_key_here
 ```
 
-### Docker部署
+### 手动Docker部署
 
 ```bash
 # 启动服务
@@ -479,125 +532,6 @@ npm start
 - 使用Pino进行结构化日志记录
 - 采用HMAC-SHA256进行API签名认证
 - 实现多层限流和缓存优化
-
-## CI/CD流程
-
-### GitHub Actions工作流
-
-项目包含完整的CI/CD流水线：
-
-#### 1. 持续集成 (CI)
-- **代码检查**: ESLint代码规范检查
-- **类型检查**: TypeScript类型验证
-- **单元测试**: Jest + fast-check属性测试
-- **安全扫描**: npm audit + Snyk安全检查
-- **覆盖率报告**: Codecov集成
-
-#### 2. 持续部署 (CD)
-- **Docker构建**: 多架构镜像构建 (amd64/arm64)
-- **自动部署**: 
-  - `develop` 分支 → Staging环境
-  - `main` 分支 → Production环境
-- **版本发布**: Git标签自动创建Release
-
-### 部署环境
-
-#### Staging环境
-```bash
-# 手动部署到staging
-./scripts/deploy.sh staging ghcr.io/username/crypto-trading-api:develop-abc123
-```
-
-#### Production环境
-```bash
-# 手动部署到production
-./scripts/deploy.sh production ghcr.io/username/crypto-trading-api:stable
-```
-
-### 监控和备份
-
-#### 系统监控
-```bash
-# 运行监控检查
-./scripts/monitoring.sh
-
-# 设置定时监控 (每5分钟)
-*/5 * * * * /opt/crypto-trading-api/scripts/monitoring.sh
-```
-
-#### 数据库备份
-```bash
-# 手动备份
-./scripts/backup.sh
-
-# 自动备份 (每天凌晨2点)
-0 2 * * * /opt/crypto-trading-api/scripts/backup.sh
-```
-
-### 环境配置
-
-#### 必需的GitHub Secrets
-```
-DB_PASSWORD=your_database_password
-REDIS_PASSWORD=your_redis_password
-SNYK_TOKEN=your_snyk_token (可选)
-SLACK_WEBHOOK=your_slack_webhook (可选)
-```
-
-#### 服务器环境变量
-```bash
-# Staging服务器
-export STAGING_HOST=staging.example.com
-export STAGING_USER=deploy
-
-# Production服务器  
-export PRODUCTION_HOST=production.example.com
-export PRODUCTION_USER=deploy
-```
-
-### 发布流程
-
-1. **开发阶段**: 在`develop`分支开发新功能
-2. **测试阶段**: 推送到`develop`分支，自动部署到Staging
-3. **发布准备**: 创建PR合并到`main`分支
-4. **生产发布**: 合并后自动部署到Production
-5. **版本标记**: 创建Git标签发布新版本
-
-```bash
-# 创建新版本
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git push origin v1.0.0
-```
-
-### 回滚策略
-
-#### 快速回滚
-```bash
-# 回滚到上一个稳定版本
-docker-compose -f docker-compose.production.yml down
-docker-compose -f docker-compose.production.yml up -d
-```
-
-#### 数据库回滚
-```bash
-# 恢复数据库备份
-gunzip /backups/trading_backup_YYYYMMDD_HHMMSS.sql.gz
-psql -h localhost -U trading_user -d trading < /backups/trading_backup_YYYYMMDD_HHMMSS.sql
-```
-
-### 性能监控
-
-- **应用监控**: 健康检查端点 `/api/v1/ping`
-- **系统监控**: CPU、内存、磁盘使用率
-- **服务监控**: 数据库、Redis、容器状态
-- **日志监控**: 结构化JSON日志分析
-
-### 安全措施
-
-- **容器安全**: 定期更新基础镜像
-- **依赖安全**: 自动安全扫描和更新
-- **网络安全**: Nginx反向代理 + SSL/TLS
-- **访问控制**: HMAC签名认证 + 限流保护
 
 ## 许可证
 
