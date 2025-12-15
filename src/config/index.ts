@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { createHash, createCipher, createDecipher } from 'crypto';
+import { createHash, createCipher, createDecipher } from 'node:crypto';
 
 config();
 

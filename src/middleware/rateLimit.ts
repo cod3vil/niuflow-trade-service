@@ -337,7 +337,7 @@ export async function rateLimitMiddleware(
       });
     } else {
       // 其他错误，允许请求继续
-      request.log.error('Rate limit middleware error', error);
+      request.log.error({ error }, 'Rate limit middleware error');
     }
   }
 }

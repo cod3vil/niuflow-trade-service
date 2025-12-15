@@ -16,7 +16,6 @@ export class CacheService {
       port: configManager.redis.port,
       password: configManager.redis.password,
       db: configManager.redis.db,
-      retryDelayOnFailover: 100,
       enableReadyCheck: false,
       maxRetriesPerRequest: 3,
       lazyConnect: true,

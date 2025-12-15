@@ -7,7 +7,7 @@ import { TickerData, OrderBookData, KlineData, Balance, OrderParams } from '../t
 
 export class ExchangeService {
   private static instance: ExchangeService;
-  private exchanges: Map<string, ccxt.Exchange> = new Map();
+  private exchanges: Map<string, any> = new Map();
   private logger: Logger;
   private cacheService: CacheService;
 
@@ -55,7 +55,7 @@ export class ExchangeService {
     this.logger.info(`Initialized ${this.exchanges.size} exchanges`);
   }
 
-  private getExchange(exchangeName: string): ccxt.Exchange {
+  private getExchange(exchangeName: string): any {
     const exchange = this.exchanges.get(exchangeName.toLowerCase());
     if (!exchange) {
       throw new ExchangeError(`Exchange ${exchangeName} not configured or supported`);
